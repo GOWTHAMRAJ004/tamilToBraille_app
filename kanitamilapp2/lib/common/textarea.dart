@@ -6,6 +6,10 @@ class textarea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      onChanged: (value){
+
+      },
+
       controller: inputcontroller,
       decoration: InputDecoration(
         border: OutlineInputBorder(

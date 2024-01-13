@@ -1,4 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
+import random
+
 
 app = Flask(__name__)
 
@@ -124,5 +126,94 @@ def test():
     if request.method == "GET":
         return jsonify({"response" : "he you where checked"})
 
+    # Braille mappings
+    braille_map = {
+        '⠁': 'அ',
+        '⠜': 'ஆ',
+        '⠊': 'இ',
+        '⠔': 'ஈ',
+        '⠥': 'உ',
+        '⠳': 'ஊ',
+        '⠢': 'எ',
+        '⠑': 'ஏ',
+        '⠌': 'ஐ',
+        '⠭': 'ஒ',
+        '⠕': 'ஓ',
+        '⠪': 'ஔ',
+        '⠅': 'க',
+        '⠬': 'ங',
+        '⠉': 'ச',
+        '⠒': 'ஞ',
+        '⠾': 'ட',
+        '⠼': 'ண',
+        '⠞': 'த',
+        '⠝': 'ந',
+        '⠏': 'ப',
+        '⠍': 'ம',
+        '⠽': 'ய',
+        '⠗': 'ர',
+        '⠇': 'ல',
+        '⠧': 'வ',
+        '⠷': 'ழ',
+        '⠸': 'ள',
+        '⠻': 'ற',
+        '⠰': 'ன',
+        '⠚': 'ஜ',
+        '⠯': 'ஷ',
+        '⠎': 'ஸ',
+        '⠓': 'ஹ',
+        '⠈': '்',
+        '⠠': 'ஃ',
+        '⠜': 'ா',
+        '⠊': 'ி',
+        '⠔': 'ீ',
+        '⠥': 'ு',
+        '⠳': 'ூ',
+        '⠢': 'ெ',
+        '⠑': 'ே',
+        '⠌': 'ை',
+        '⠭': 'ொ',
+        '⠪': 'ோ',
+        '⠂': ',',
+        '⠆': ';',
+        '⠒': ':',
+        '⠖': '!',
+        '⠦': '?',
+        '⠲': '.'
+    }
+
+    # Function to generate a random question
+    def generate_question():
+        braille_representation = random.choice(list(braille_map.keys()))
+        tamil_char = braille_map[braille_representation]
+        return braille_representation, tamil_char
+
+    # Route for the home page
+    @app.route('/')
+    def index():
+        return render_template('index.html')
+
+    # Route to start and play the game
+    @app.route('/play_game', methods=['GET', 'POST'])
+    def play_game():
+        if request.method == 'POST':
+            # Get player's answer from the form
+            player_answer = request.form['answer']
+
+            # Generate a random question
+            braille_representation, correct_answer = generate_question()
+
+            # Check if the answer is correct
+            if player_answer == correct_answer:
+                result = "Correct!"
+            else:
+                result = f"Wrong! The correct answer is '{correct_answer}'."
+
+            return render_template('play_game.html', question=braille_representation, result=result)
+
+        return render_template('play_game.html', question=None, result=None)
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=9090)

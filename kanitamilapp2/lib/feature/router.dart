@@ -13,12 +13,12 @@ switch(routeSettings.name){
     return MaterialPageRoute(builder: (_)=> introScreen());
   case FileUpload.routername:
     return MaterialPageRoute(builder: (_)=> FileUpload());
-  case brailyToTamil.routername:
-    return MaterialPageRoute(builder: (_)=> brailyToTamil());
+  case brailleToTamil.routername:
+    return MaterialPageRoute(builder: (_)=> brailleToTamil ());
   default:
     return MaterialPageRoute(builder: (_)=> Scaffold(
       body: Center(
-        child: Text("hi ur correct"),
+        child: Text("something went wrong "),
       ),
     ));
 }

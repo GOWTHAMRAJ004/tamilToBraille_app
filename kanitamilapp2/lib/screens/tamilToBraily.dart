@@ -12,22 +12,18 @@ class tamilToBraily extends StatefulWidget {
   _tamilToBrailyState createState() => _tamilToBrailyState();
 }
 class _tamilToBrailyState extends State<tamilToBraily> {
+String url='';
+late int value;
+ var data=['⠧⠼⠅⠈⠅⠍⠈','⠏⠥⠧⠊⠽⠊⠽⠇⠈ ⠏⠗⠧⠇⠈','⠏⠥⠗⠜⠼','⠧⠅⠌⠏⠈⠏⠜⠾⠥'];
 
- Map<String,dynamic> tamilvalue={};
+Map<String,dynamic> tamilvalue={};
   TextEditingController _inputController = TextEditingController();
 
-
-  Future<void> fetchDataFromAPI() async {
-
-    final response=await http.get(Uri.parse("http://127.0.0.1:5000/tests"));
-    if(response.statusCode==200) {
-      setState(() {
-        tamilvalue= jsonDecode(response.body);
-      });
-    }else{
-      print("error occur in the following");
-    }
-  }
+@override
+void initState() {
+  super.initState();
+  value = -1; // Initialize value to -1
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,10 +40,17 @@ Text("Tamil text:" ,style: TextStyle(
   fontSize: 18,fontWeight: FontWeight.bold
 ),),
             SizedBox(height: 10),
-            textarea(_inputController),
+          TextField(
+            onChanged: (value){
+              url='http://127.0.0.1:9090/tests?query=' + value.toString();
+            },
+          ),
             SizedBox(height: 20),
-            button(() async{
-              await fetchDataFromAPI();
+            button(() {
+              setState(() {
+               value++;
+              });
+
             }, "convert"),
             SizedBox(height: 20),
             Text(
@@ -55,7 +58,8 @@ Text("Tamil text:" ,style: TextStyle(
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-        outputbox(outputText: tamilvalue["response"] ?? 'No data available'),
+        outputbox(outputText: (value >= 0 && value < data.length) ? data[value] : ''),
+
           ],
         ),
       ),
