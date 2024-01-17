@@ -108,19 +108,23 @@ def braille_to_tamil(text):
 
 
 
-@app.route('/tamil-to-braille', methods=['POST'])
+@app.route('/tamil-to-braille', methods=['GET'])
 def convert_tamil_to_braille():
-    data = request.json
-    user_input = data.get('text')
-    braille_output = tamil_to_braille(user_input)
-    return jsonify({'braille': braille_output})
+    user_input = request.args.get('text')
+    if user_input:
+        braille_output = tamil_to_braille(user_input)
+        return jsonify({'braille': braille_output})
+    else:
+        return jsonify({'error': 'Missing text parameter'}), 400
 
-@app.route('/braille-to-tamil', methods=['POST'])
+@app.route('/braille-to-tamil', methods=['GET'])
 def convert_braille_to_tamil():
-    data = request.json
-    user_input = data.get('text')
-    tamil_output = braille_to_tamil(user_input)
-    return jsonify({'tamil': tamil_output})
+    user_input = request.args.get('text')
+    if user_input:
+        tamil_output = braille_to_tamil(user_input)
+        return jsonify({'tamil': tamil_output})
+    else:
+        return jsonify({'error': 'Missing text parameter'}), 400
 @app.route('/tests', methods=['GET'])
 def test():
     if request.method == "GET":
@@ -216,4 +220,4 @@ def test():
 
 
 if __name__ == '__main__':
-    app.run(debug=True,port=9090)
+    app.run(debug=True)

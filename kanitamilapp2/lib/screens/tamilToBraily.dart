@@ -12,18 +12,24 @@ class tamilToBraily extends StatefulWidget {
   _tamilToBrailyState createState() => _tamilToBrailyState();
 }
 class _tamilToBrailyState extends State<tamilToBraily> {
-String url='';
-late int value;
- var data=['⠧⠼⠅⠈⠅⠍⠈','⠏⠥⠧⠊⠽⠊⠽⠇⠈ ⠏⠗⠧⠇⠈','⠏⠥⠗⠜⠼','⠧⠅⠌⠏⠈⠏⠜⠾⠥'];
 
-Map<String,dynamic> tamilvalue={};
+  String brailleText = '';
+  String tamilResult = '';
+  Future<void> convertToTamil() async {
+    Map<String, dynamic> result = await convertTamilToBraille(brailleText);
+
+    if (result['success']) {
+      setState(() {
+        tamilResult = result['result'];
+      });
+    } else {
+      print(result['error']);
+    }
+  }
+
   TextEditingController _inputController = TextEditingController();
 
-@override
-void initState() {
-  super.initState();
-  value = -1; // Initialize value to -1
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,34 +42,37 @@ void initState() {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-Text("Tamil text:" ,style: TextStyle(
-  fontSize: 18,fontWeight: FontWeight.bold
-),),
+            Text(
+              "Tamil text:",
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 10),
-          TextField(
-            onChanged: (value){
-              url='http://127.0.0.1:9090/tests?query=' + value.toString();
-            },
-          ),
+            TextField(
+              onChanged: (value) {
+                brailleText = value; // Capture the value from the TextField
+              },
+              controller: _inputController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                hintText: 'Enter a Tamil text',
+              ),
+            ),
             SizedBox(height: 20),
-            button(() {
-              setState(() {
-               value++;
-              });
-
-            }, "convert"),
+            button(() async {
+              convertToTamil();
+            }, "Convert"),
             SizedBox(height: 20),
             Text(
               'Converted Braille Text:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-        outputbox(outputText: (value >= 0 && value < data.length) ? data[value] : ''),
-
+            outputbox(outputText:tamilResult ),
           ],
         ),
       ),
     );
   }
 }
-

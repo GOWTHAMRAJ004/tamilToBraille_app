@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../API/API.dart';
 import '../common/button.dart';
 import '../common/output.dart';
 import '../common/textarea.dart';
@@ -14,16 +15,20 @@ class brailleToTamil extends StatefulWidget {
 
 class _brailleToTamilState extends State<brailleToTamil> {
   TextEditingController _inputController = TextEditingController();
-  String _convertedText = '';
+  String brailleText = '';
+  String tamilResult = '';
+  Future<void> convertbrailleToTamil() async {
+    Map<String, dynamic> result = await convertBrailleToTamil(brailleText);
 
-  var data = ['வணக்கம்', 'புவியியல் பரவல்', 'புராண', 'வகைப்பாடு'];
-  late int value;
-
-  @override
-  void initState() {
-    super.initState();
-    value = -1; // Initialize value to -1
+    if (result['success']) {
+      setState(() {
+        tamilResult = result['result'];
+      });
+    } else {
+      print(result['error']);
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -42,12 +47,21 @@ class _brailleToTamilState extends State<brailleToTamil> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            textarea(_inputController),
+            TextField(
+              onChanged: (value) {
+                brailleText = value; // Capture the value from the TextField
+              },
+              controller: _inputController,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                hintText: 'Enter a Tamil text',
+              ),
+            ),
             SizedBox(height: 20),
             button(() async {
-              setState(() {
-                value++;
-              });
+              convertbrailleToTamil();
             }, "Convert"),
             SizedBox(height: 20),
             Text(
@@ -55,7 +69,7 @@ class _brailleToTamilState extends State<brailleToTamil> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
-            outputbox(outputText: (value >= 0 && value < data.length) ? data[value] : ''),
+            outputbox(outputText:  tamilResult ),
           ],
         ),
       ),
