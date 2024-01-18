@@ -36,41 +36,51 @@ class _tamilToBrailyState extends State<tamilToBraily> {
       appBar: AppBar(
         title: Text('Tamil and Braille Converter'),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(
-              "Tamil text:",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            TextField(
-              onChanged: (value) {
-                brailleText = value; // Capture the value from the TextField
-              },
-              controller: _inputController,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                hintText: 'Enter a Tamil text',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Text(
+                "Tamil text:",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-            ),
-            SizedBox(height: 20),
-            button(() async {
-              convertToTamil();
-            }, "Convert"),
-            SizedBox(height: 20),
-            Text(
-              'Converted Braille Text:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            outputbox(outputText:tamilResult ),
-          ],
+              SizedBox(height: 10),
+              TextField(
+                onChanged: (value) {
+                  brailleText = value; // Capture the value from the TextField
+                },
+                controller: _inputController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  hintText: 'Enter a Tamil text',
+                ),
+              ),
+              SizedBox(height: 20),
+              button(() async {
+                convertToTamil();
+              }, "Convert"),
+              SizedBox(height: 20),
+              Text(
+                'Converted Braille Text:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10),
+              outputbox(outputText:tamilResult ),
+              SizedBox(height: 20),
+              button(() {
+                setState(() {
+                  _inputController.text='';
+                  tamilResult='';
+                });
+
+              }, 'clear')
+            ],
+          ),
         ),
       ),
     );
