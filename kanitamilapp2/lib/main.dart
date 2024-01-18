@@ -3,6 +3,8 @@ import 'package:kanitamilapp2/feature/router.dart';
 import 'package:kanitamilapp2/screens/intro.dart';
 import 'package:kanitamilapp2/screens/tamilToBraily.dart';
 
+import 'feature/splashScreen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +23,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
      onGenerateRoute:(settings)=> generateRoute(settings),
-      home:  introScreen(),
+      home:  splashScreen(),
     );
   }
 }
