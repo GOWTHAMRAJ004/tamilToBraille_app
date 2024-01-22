@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "24372850869",
+    "project_id": "kan-ezhuthu",
+    "storage_bucket": "kan-ezhuthu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24372850869:android:f1eacb7b7dd0fc8bce8efc",
+        "android_client_info": {
+          "package_name": "com.example.kanitamilapp2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEdWm17iuZ7NtV40Fqo-PKme706jYhMnc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
