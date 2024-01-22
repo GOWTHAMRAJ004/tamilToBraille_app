@@ -70,6 +70,9 @@ class _brailleToTamilState extends State<brailleToTamil> {
             ),
             SizedBox(height: 10),
             outputbox(outputText:  tamilResult ),
+            ElevatedButton(onPressed: (){
+              Navigator.pushNamed(context, '/introScreen');
+            }, child: Text("back"))
           ],
         ),
       ),

@@ -78,7 +78,10 @@ class _tamilToBrailyState extends State<tamilToBraily> {
                   tamilResult='';
                 });
 
-              }, 'clear')
+              }, 'clear'),
+              ElevatedButton(onPressed: (){
+                Navigator.pushNamed(context, '/introScreen');
+              }, child: Text("back"))
             ],
           ),
         ),

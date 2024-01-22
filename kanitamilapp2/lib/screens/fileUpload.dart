@@ -87,8 +87,10 @@ class _FileUploadState extends State<FileUpload> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _uploadFile,
-              child: Text("Upload File"),
-            ),
+              child: Text("Upload File"),),
+            ElevatedButton(onPressed: (){
+              Navigator.pushNamed(context, "/introScreen");
+            }, child:Text("back") )
           ],
         ),
       ),

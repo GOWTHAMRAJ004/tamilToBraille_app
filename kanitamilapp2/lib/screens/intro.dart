@@ -101,7 +101,7 @@ class _introScreenState extends State<introScreen> {
               onPressed: () {
                 // Navigate to the main part of your app
                 // Replace 'YourMainScreen()' with the actual widget/screen you want to navigate to.
-
+                Navigator.pushNamed(context, "/tamilToBraily");
               },
               child: Text('Start Exploring'),
             ),
