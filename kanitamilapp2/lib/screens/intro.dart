@@ -74,6 +74,16 @@ class _introScreenState extends State<introScreen> {
                 Navigator.pushNamed(context, '/tamilToBraily');
               },
             ),
+
+            ListTile(
+              title: Text(
+                'Chat Bot',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/chatBot');
+              },
+            ),
           ],
         ),
       ),
