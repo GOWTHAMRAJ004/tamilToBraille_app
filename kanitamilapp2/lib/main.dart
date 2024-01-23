@@ -57,6 +57,9 @@ class _MyAppState extends State<MyApp> {
         case "braille to tamil":
           NavigatorKey.navigatorKey.currentState!.pushNamed('/brailleToTamil');
           break;
+        case "chatBot":
+          NavigatorKey.navigatorKey.currentState!.pushNamed('/chatBot');
+          break;
       }
     }
   }

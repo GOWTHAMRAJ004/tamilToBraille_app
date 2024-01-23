@@ -48,6 +48,8 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   alan_voice: ^4.4.0
+  dash_chat_2: ^0.0.16
+  chat_gpt_sdk: ^2.2.8
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
