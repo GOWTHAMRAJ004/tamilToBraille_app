@@ -48,13 +48,7 @@
 - Refinement of chatbot and voice assistant capabilities.  
 - Expanding resources to include more languages and features.  
 - Product launch and outreach to the visually impaired community.  
-
----
-
-## 🤝 Contributors  
-
-We welcome contributions!  
-Feel free to submit issues, suggestions, or pull requests to improve **Kan Ezhuthu**.  
+  
 
 ---
 
