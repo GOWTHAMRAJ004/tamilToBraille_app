@@ -1,54 +1,56 @@
 # 🌟 Kan Ezhuthu  
 
-**Kan Ezhuthu** is an innovative solution aimed at improving the literacy rate of visually impaired individuals by providing Tamil Braille learning tools. It addresses the lack of accessible and affordable resources for Tamil Braille education with a user-friendly and interactive app.  
+**Kan Ezhuthu** is an innovative Braille learning system designed to empower visually impaired individuals. Powered by a custom AI implementation, it offers an interactive and personalized self-learning experience, bridging the educational gap with scalable solutions for learners of all ages and abilities.  
 
 ---
 
 ## 🆕 Features  
 
-1. **Tamil OCR to Braille**  
-   - Converts Tamil text and images into Braille using advanced OCR technology.  
+### 🔹 AI-Powered Learning  
+- **Custom Fine-Tuned AI Model** – Creates tailored learning modules for a personalized experience.  
+- **AI-Enhanced Text-to-Speech** – Uses AI-driven NLP for high-quality Tamil voice output, improving accessibility.  
+- **Interactive Q&A & Dynamic Word Generation** – AI-powered Q&A and vocabulary enhancement for better engagement.  
+- **Customized Online Test Modes & Automated Notifications** – AI-driven assessments and real-time progress tracking.  
 
-2. **Braille Document Conversion**  
-   - Effortlessly transforms PDFs and text documents into Tamil Braille for easy reading and access.  
+### 🔹 Braille Conversion & Accessibility  
+- **Tamil OCR to Braille** – Converts Tamil text and images into Braille using advanced OCR technology.  
+- **Braille Document Conversion** – Transforms PDFs and text documents into Tamil Braille for easy reading.  
+- **Braille Library Access** – Stores Braille-converted documents for future reference and learning.  
 
-3. **AI Voice Assistant**  
-   - Provides step-by-step guidance for users, ensuring smooth navigation and learning.  
+### 🔹 Interactive Engagement  
+- **AI Voice Assistant** – Provides real-time guidance and navigation support through voice-assisted learning.  
+- **Braille Chatbot** – An interactive chatbot for conversational Tamil Braille guidance.  
+- **AI-Powered Sentence-Based Braille Output** – Transforms words into structured sentences for better readability.  
 
-4. **Braille Chatbot**  
-   - An interactive chatbot to enhance self-learning through conversational Tamil Braille guidance.  
-
-5. **Library Functionality**  
-   - Stores Braille-converted documents for future access.  
-
-6. **Interactive Hardware Support**  
-   - Enables users to provide input and read outputs seamlessly.  
+### 🔹 Hardware Integration  
+- **Tactile Braille Hardware** – Enables users to type and read Braille interactively, integrating seamlessly with AI.  
+- **Language Translation & Document Scanning** – Expands accessibility with multi-language support and document scanning.  
 
 ---
 
 ## 🎯 Uniqueness  
 
-- **Inclusive Design**: Focused on UI/UX for accessibility and user-friendliness.  
-- **Affordable Solution**: Aims to reduce the high cost of existing Braille learning systems.  
-- **Comprehensive Features**: Combines OCR, AI, and Braille technology into a single platform.  
+✅ **Inclusive Design** – Focused on accessibility and ease of use.  
+✅ **Affordable Solution** – A cost-effective alternative to traditional Braille learning systems.  
+✅ **Comprehensive AI Integration** – Combines OCR, AI-driven NLP, reinforcement learning, and tactile hardware for a holistic learning experience.  
 
 ---
 
 ## 🚀 Development Highlights  
 
-- **Algorithm**: Created the **Sorkal Algorithm** for Tamil-to-Braille conversion.  
-- **Testing**: Successfully tested the app in simulated and operational environments (TRL1-TRL7).  
-- **Hardware Integration**: Interactive hardware enhances the overall learning experience.  
+- **Custom AI Model** – Incorporating speech recognition, text-to-speech, OCR, and reinforcement learning.  
+- **Algorithm** – Developed the **Sorkal Algorithm** for accurate Tamil-to-Braille conversion.  
+- **Hardware Integration** – Seamlessly integrates with Tactile Braille Hardware for enhanced user experience.  
+- **Testing & Validation** – Successfully tested across multiple environments (TRL1-TRL7).  
 
 ---
 
 ## 🌱 Future Plans  
 
-- User testing and feedback integration.  
-- Refinement of chatbot and voice assistant capabilities.  
-- Expanding resources to include more languages and features.  
-- Product launch and outreach to the visually impaired community.  
-  
+📌 Enhance AI chatbot and voice assistant functionalities.  
+📌 Expand language support for broader accessibility.  
+📌 Conduct extensive user testing and feedback-driven improvements.  
+📌 Scale the platform for widespread adoption in the visually impaired community.  
 
 ---
 
@@ -56,7 +58,10 @@
 
 - **Frontend**: Flutter  
 - **Backend**: Flask  
+- **AI & NLP**: Custom fine-tuned AI model with OpenAI-based enhancements  
 - **OCR**: Custom Tamil OCR  
-- **Hardware**: Arduino Integration  
+- **Hardware**: Arduino-based Tactile Braille Integration  
 
 ---
+
+🚀 *Kan Ezhuthu aims to transform Braille learning with AI-driven innovation, making literacy accessible to all!*  
