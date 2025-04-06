@@ -53,7 +53,7 @@ class _introScreenState extends State<introScreen> {
                 style: TextStyle(fontSize: 16.0),
               ),
               onTap: () {
-                Navigator.pushNamed(context, '/fileUpload');
+                Navigator.pushNamed(context, '/MyHomePage');
               },
             ),
             ListTile(
@@ -84,6 +84,15 @@ class _introScreenState extends State<introScreen> {
                 Navigator.pushNamed(context, '/chatBot');
               },
             ),
+            ListTile(
+              title: Text(
+                'Libray ',
+                style: TextStyle(fontSize: 16.0),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, '/PdfUploadScreen');
+              },
+            )
           ],
         ),
       ),

@@ -1,68 +1,62 @@
-import 'dart:io'; // Import 'dart:io' for the File class
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
-class FileUpload extends StatefulWidget {
-  static const routername = "/fileUpload";
-
-  const FileUpload({Key? key}) : super(key: key);
-
+class MyHomePage extends StatefulWidget {
+  static const routername = "/MyHomePage";
   @override
-  State<FileUpload> createState() => _FileUploadState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _FileUploadState extends State<FileUpload> {
-  File? _pickedFile; // Use File? to handle the possibility of no file being picked
+class _MyHomePageState extends State<MyHomePage> {
+  late File _image = File('path_to_default_image');
+  String _brailleText = "";
 
-  void _pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+  Future<void> _getImage() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
-    if (result != null) {
+    if (pickedFile != null) {
       setState(() {
-        _pickedFile = File(result.files.single.path!);
+        _image = File(pickedFile.path);
       });
     }
   }
 
-  void _uploadFile() async {
-    if (_pickedFile == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("No file selected"),
-        ),
-      );
+  Future<void> _processImage() async {
+    if (_image == null) {
+      // Show an alert or message indicating that no image is selected
       return;
     }
 
-    // Replace "YOUR_API_ENDPOINT" with your actual API endpoint
-    String apiEndpoint = "YOUR_API_ENDPOINT";
+    // Create a multipart request
+    var request = http.MultipartRequest('POST', Uri.parse('http://your-api-endpoint.com/image-to-braille'));
 
-    // Make API request
+    // Add the image file to the request
+    request.files.add(await http.MultipartFile.fromPath('file', _image.path));
+
     try {
-      // Use http.MultipartFile.fromBytes for file content
-      http.MultipartFile file = http.MultipartFile.fromBytes(
-        'file',
-        await _pickedFile!.readAsBytes(),
-        filename: _pickedFile!.path.split('/').last,
-      );
-
-      // Create a MultipartRequest to handle file upload
-      var request = http.MultipartRequest('POST', Uri.parse(apiEndpoint))
-        ..files.add(file);
-
       // Send the request
       var response = await request.send();
 
-      // Handle the API response
+      // Check if the response status code is OK (200)
       if (response.statusCode == 200) {
-        print("File uploaded successfully");
-        print(await response.stream.bytesToString());
+        // Read and decode the response
+        var responseBody = await response.stream.bytesToString();
+        var jsonResponse = json.decode(responseBody);
+
+        // Update the UI with the Braille text
+        setState(() {
+          _brailleText = jsonResponse['braille_text'];
+        });
       } else {
-        print("Error uploading file: ${response.statusCode}");
+        // Handle non-OK response status codes, e.g., display an error message
+        print('Error: ${response.statusCode}');
       }
     } catch (error) {
-      print("Error uploading file: $error");
+      // Handle errors, e.g., display an error message
+      print('Error: $error');
     }
   }
 
@@ -70,27 +64,38 @@ class _FileUploadState extends State<FileUpload> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("File Upload Example"),
+        title: Text(
+          'OCR analiyser'
+        ),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            _image == null
+                ? Text('No image selected.')
+                : Image.file(_image, height: 200.0),
+            SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: _pickFile,
-              child: Text("Pick a File"),
+              onPressed: _getImage,
+              child: Text('Select Image'),
             ),
-            SizedBox(height: 20),
-            _pickedFile != null
-                ? Text("Selected File: ${_pickedFile!.path}")
-                : Text("No file selected"),
-            SizedBox(height: 20),
+            SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: _uploadFile,
-              child: Text("Upload File"),),
-            ElevatedButton(onPressed: (){
-              Navigator.pushNamed(context, "/introScreen");
-            }, child:Text("back") )
+              onPressed: _processImage,
+              child: Text('Process Image'),
+            ),
+            SizedBox(height: 20.0),
+            Container(
+              width: 300.0,
+              height: 100.0,
+              decoration: BoxDecoration(
+                border: Border.all(),
+              ),
+              child: Center(
+                child: Text(_brailleText),
+              ),
+            ),
           ],
         ),
       ),

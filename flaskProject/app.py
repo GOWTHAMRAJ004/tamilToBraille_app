@@ -1,5 +1,14 @@
 from flask import Flask, request, jsonify, render_template
 import random
+import cv2
+import pytesseract
+from PIL import Image
+import pdf2image
+import os
+import PyPDF2
+from fpdf import FPDF
+from tkinter import Tk
+from tkinter.filedialog import askopenfilename
 
 
 app = Flask(__name__)
@@ -106,7 +115,114 @@ def braille_to_tamil(text):
                     break
     return tamil
 
+def read_text_from_pdf(file_path):
+    with open(file_path, 'rb') as file:
+        pdf_reader = PyPDF2.PdfReader(file)
+        text = ''
+        for page_num in range(len(pdf_reader.pages)):
+            page = pdf_reader.pages[page_num]
+            text += page.extract_text()
+        return text
 
+def convert_Tamil_to_braille(tamil_text):
+    braille_text = ''
+    for char in tamil_text:
+        if char in braille_map:
+            braille_text += braille_map[char]
+        elif char.isdigit():
+            braille_text += num_map[char]
+        else:
+            braille_text += char
+    return braille_text
+
+def save_braille_as_pdf(braille_text):
+    pdf_output_path = os.path.join(os.path.expanduser('~'), 'Downloads', 'braille_output.pdf')
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.multi_cell(0, 10, braille_text)
+    pdf.output(pdf_output_path)
+    return pdf_output_path
+
+
+
+# Set the path to Tesseract executable (change it based on your installation)
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+# Set the language to Tamil
+lang = 'tam'
+
+# Set the path to the Tesseract data files (change it based on your installation)
+os.environ['TESSDATA_PREFIX'] = r'C:\Program Files\Tesseract-OCR\tessdata'
+
+# Tamil Braille mappings
+tamil_braille_map = {
+    'அ': '⠁', 'ஆ': '⠜', 'இ': '⠊', 'ஈ': '⠔', 'உ': '⠥', 'ஊ': '⠳', 'எ': '⠢', 'ஏ': '⠑',
+    'ஐ': '⠌', 'ஒ': '⠭', 'ஓ': '⠕', 'ஔ': '⠪', 'க': '⠅', 'ங': '⠬', 'ச': '⠉', 'ஞ': '⠒',
+    'ட': '⠾', 'ண': '⠼', 'த': '⠞', 'ந': '⠝', 'ப': '⠏', 'ம': '⠍', 'ய': '⠽', 'ர': '⠗',
+    'ல': '⠇', 'வ': '⠧', 'ழ': '⠷', 'ள': '⠸', 'ற': '⠻', 'ன': '⠰', 'ஜ': '⠚', 'ஷ': '⠯',
+    'ஸ': '⠎', 'ஹ': '⠓', '்': '⠈', 'ஃ': '⠠', 'ா': '⠜', 'ி': '⠊', 'ீ': '⠔', 'ு': '⠥',
+    'ூ': '⠳', 'ெ': '⠢', 'ே': '⠑', 'ை': '⠌', 'ொ': '⠭', 'ோ': '⠪', 'ௌ': '⠪', ' ': ' ',
+    ',': '⠂', ';': '⠆', ':': '⠒', '!': '⠖', '?': '⠦', '.': '⠲'
+}
+
+def convert_to_tamils_braille(tamil_text):
+    return ''.join([tamil_braille_map.get(char, char) for char in tamil_text])
+
+@app.route('/image-to-braille', methods=['POST'])
+def image_to_braille():
+    try:
+        # Check if the POST request has the file part
+        if 'file' not in request.files:
+            return jsonify({'error': 'No file part'}), 400
+
+        file = request.files['file']
+
+        # Check if the file is empty
+        if file.filename == '':
+            return jsonify({'error': 'No selected file'}), 400
+
+        # Save the received file
+        file_path = os.path.join('uploads', file.filename)
+        file.save(file_path)
+
+        # Read text from the image using Tesseract OCR
+        img = cv2.imread(file_path)
+        gray_image = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        text = pytesseract.image_to_string(gray_image, lang=lang)
+
+        # Convert Tamil text to Braille
+        tamil_braille_text = convert_to_tamils_braille(text)
+
+        return jsonify({'tamil_text': text, 'braille_text': tamil_braille_text})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/pdf-to-braille', methods=['POST'])
+def pdf_to_braille():
+    try:
+        # Receive PDF file from Flutter app
+        file = request.files['pdf']
+
+        # Save the received PDF file
+        file_path = os.path.join(os.path.expanduser('~'), 'Downloads', 'input.pdf')
+        file.save(file_path)
+
+        # Read text from PDF
+        tamil_text = read_text_from_pdf(file_path)
+
+        # Convert Tamil text to Braille
+        braille_text = convert_Tamil_to_braille(tamil_text)
+
+        # Save Braille as PDF and get the path
+        pdf_output_path = save_braille_as_pdf(braille_text)
+
+        return jsonify({'braille_pdf_path': pdf_output_path})
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
 
 @app.route('/tamil-to-braille', methods=['GET'])
 def convert_tamil_to_braille():
@@ -130,94 +246,10 @@ def test():
     if request.method == "GET":
         return jsonify({"response" : "he you where checked"})
 
-    # Braille mappings
-    braille_map = {
-        '⠁': 'அ',
-        '⠜': 'ஆ',
-        '⠊': 'இ',
-        '⠔': 'ஈ',
-        '⠥': 'உ',
-        '⠳': 'ஊ',
-        '⠢': 'எ',
-        '⠑': 'ஏ',
-        '⠌': 'ஐ',
-        '⠭': 'ஒ',
-        '⠕': 'ஓ',
-        '⠪': 'ஔ',
-        '⠅': 'க',
-        '⠬': 'ங',
-        '⠉': 'ச',
-        '⠒': 'ஞ',
-        '⠾': 'ட',
-        '⠼': 'ண',
-        '⠞': 'த',
-        '⠝': 'ந',
-        '⠏': 'ப',
-        '⠍': 'ம',
-        '⠽': 'ய',
-        '⠗': 'ர',
-        '⠇': 'ல',
-        '⠧': 'வ',
-        '⠷': 'ழ',
-        '⠸': 'ள',
-        '⠻': 'ற',
-        '⠰': 'ன',
-        '⠚': 'ஜ',
-        '⠯': 'ஷ',
-        '⠎': 'ஸ',
-        '⠓': 'ஹ',
-        '⠈': '்',
-        '⠠': 'ஃ',
-        '⠜': 'ா',
-        '⠊': 'ி',
-        '⠔': 'ீ',
-        '⠥': 'ு',
-        '⠳': 'ூ',
-        '⠢': 'ெ',
-        '⠑': 'ே',
-        '⠌': 'ை',
-        '⠭': 'ொ',
-        '⠪': 'ோ',
-        '⠂': ',',
-        '⠆': ';',
-        '⠒': ':',
-        '⠖': '!',
-        '⠦': '?',
-        '⠲': '.'
-    }
-
-    # Function to generate a random question
-    def generate_question():
-        braille_representation = random.choice(list(braille_map.keys()))
-        tamil_char = braille_map[braille_representation]
-        return braille_representation, tamil_char
-
-    # Route for the home page
-    @app.route('/')
-    def index():
-        return render_template('index.html')
-
-    # Route to start and play the game
-    @app.route('/play_game', methods=['GET', 'POST'])
-    def play_game():
-        if request.method == 'POST':
-            # Get player's answer from the form
-            player_answer = request.form['answer']
-
-            # Generate a random question
-            braille_representation, correct_answer = generate_question()
-
-            # Check if the answer is correct
-            if player_answer == correct_answer:
-                result = "Correct!"
-            else:
-                result = f"Wrong! The correct answer is '{correct_answer}'."
-
-            return render_template('play_game.html', question=braille_representation, result=result)
-
-        return render_template('play_game.html', question=None, result=None)
 
 
 
 if __name__ == '__main__':
+    if not os.path.exists('uploads'):
+        os.makedirs('uploads')
     app.run(debug=True)
